@@ -7316,6 +7316,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1057554322}
+  - component: {fileID: 1057554323}
   m_Layer: 5
   m_Name: Contaminantes
   m_TagString: Untagged
@@ -7346,6 +7347,39 @@ RectTransform:
   m_AnchoredPosition: {x: 183, y: 42}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1057554323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1057554321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81211592b6ce1da40ac2022baecc923f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ContaminantsHUD
+  slots:
+  - label: 
+    contaminants: []
+    icon: {fileID: 0}
+    countText: {fileID: 0}
+  - label: 
+    contaminants: []
+    icon: {fileID: 0}
+    countText: {fileID: 0}
+  - label: 
+    contaminants: []
+    icon: {fileID: 0}
+    countText: {fileID: 0}
+  - label: 
+    contaminants: []
+    icon: {fileID: 0}
+    countText: {fileID: 0}
+  progressSlider: {fileID: 829724329}
+  percentText: {fileID: 255992968}
+  dimWhenEmpty: 0
+  emptyAlpha: 0.4
 --- !u!1 &1066496281
 GameObject:
   m_ObjectHideFlags: 0
@@ -15424,7 +15458,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec7dcff31c126644902f8984899d24a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CleaningManager
-  currentCleaningPercentage: 0
+  collectedValue: 0
+  totalValue: 0
+  defaultGoal: {fileID: 0}
 --- !u!4 &1782550251
 Transform:
   m_ObjectHideFlags: 0
