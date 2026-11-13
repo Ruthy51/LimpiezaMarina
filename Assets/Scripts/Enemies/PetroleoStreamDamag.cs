@@ -20,17 +20,26 @@ public class PetroleoStreamDamage : MonoBehaviour
 
     private void OnParticleCollision(GameObject other)
     {
-        if (other.CompareTag("Player") ||
-            other.gameObject.layer == LayerMask.NameToLayer("Player"))
-        {
-            if (other.TryGetComponent<IDamageable>(out IDamageable damageable))
-            {
-                damageable.TakeDamage(contaminationDamage);
+        Debug.Log(
+            "[PetroleoStream] COLISION CON: "
+            + other.name);
 
-                Debug.Log(
-                    $"[PetroleoStream] Impacto en '{other.name}'. " +
-                    $"Contaminación aplicada: {contaminationDamage}");
-            }
+        IDamageable damageable =
+            other.GetComponent<IDamageable>();
+
+        if (damageable == null)
+        {
+            damageable =
+                other.GetComponentInParent<IDamageable>();
+        }
+
+        if (damageable != null)
+        {
+            damageable.TakeDamage(contaminationDamage);
+
+            Debug.Log(
+                $"[PetroleoStream] Impacto en '{other.name}'. " +
+                $"Contaminación aplicada: {contaminationDamage}");
         }
     }
 }

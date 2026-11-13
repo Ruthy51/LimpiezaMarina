@@ -7,6 +7,7 @@
  * Función: Controlador principal del jugador (Aqua-Drone).
  * Explicación: Gestiona movimiento, orientación mediante mouse,
  * disparo de burbujas y activación temporal del cono recolector.
+ * Además limita la navegación al área de agua utilizando el Terrain.
  *********************************************************************************************/
 
 using System.Collections;
@@ -18,6 +19,14 @@ public class PlayerController3D : MonoBehaviour
     [Header("Configuración de Movimiento")]
     [SerializeField] private float moveSpeed = 6.0f;
     [SerializeField] private LayerMask groundLayer;
+
+    [Header("Límites del Lago")]
+    [SerializeField] private Terrain terrain;
+    [SerializeField] private float waterY = 0f;
+
+    [SerializeField]
+    [Tooltip("Margen de seguridad respecto a la costa. Valores más negativos alejan al dron de la orilla.")]
+    private float coastOffset = -0.05f;
 
     [Header("Referencias de Ataque")]
     [SerializeField] private Transform firePoint;
@@ -54,6 +63,17 @@ public class PlayerController3D : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        if (terrain != null)
+        {
+            float terrainHeight =
+                terrain.SampleHeight(transform.position)
+                + terrain.transform.position.y;
+
+           }
+    }
+
     private void Update()
     {
         HandleMovement();
@@ -72,56 +92,101 @@ public class PlayerController3D : MonoBehaviour
 
         currentMoveDirection = moveDirection;
 
-        if (moveDirection.magnitude >= 0.1f)
+        if (moveDirection.magnitude < 0.1f)
+            return;
+
+        Vector3 delta =
+            moveDirection *
+            moveSpeed *
+            Time.deltaTime;
+
+        Vector3 nextPosition =
+            transform.position + delta;
+
+        if (IsWater(nextPosition))
         {
-            characterController.Move(
-                moveDirection * moveSpeed * Time.deltaTime);
+            characterController.Move(delta);
+        }
+        else
+        {
+            float terrainHeight =
+                terrain.SampleHeight(nextPosition)
+                + terrain.transform.position.y;
+
+       
+            // Permite deslizar por la costa
+
+            Vector3 deltaX =
+                new Vector3(delta.x, 0f, 0f);
+
+            Vector3 deltaZ =
+                new Vector3(0f, 0f, delta.z);
+
+            if (IsWater(transform.position + deltaX))
+            {
+                characterController.Move(deltaX);
+            }
+            else if (IsWater(transform.position + deltaZ))
+            {
+                characterController.Move(deltaZ);
+            }
         }
     }
 
-private void UpdateVisorPosition()
-{
-    if (visor == null)
-        return;
-
-    // Radio real de la órbita sobre la esfera
-    float radius = Mathf.Abs(visorIdlePosition.z);
-
-    // Quieto = vuelve suavemente al frente
-    if (currentMoveDirection.sqrMagnitude < 0.01f)
+    private bool IsWater(Vector3 position)
     {
+        if (terrain == null)
+            return true;
+
+        float terrainHeight =
+            terrain.SampleHeight(position)
+            + terrain.transform.position.y;
+
+        return terrainHeight <= waterY + coastOffset;
+    }
+
+    private void UpdateVisorPosition()
+    {
+        if (visor == null)
+            return;
+
+        float radius = Mathf.Abs(visorIdlePosition.z);
+
+        if (currentMoveDirection.sqrMagnitude < 0.01f)
+        {
+            visor.localPosition =
+                Vector3.Lerp(
+                    visor.localPosition,
+                    visorIdlePosition,
+                    10f * Time.deltaTime);
+
+            return;
+        }
+
+        Vector3 localMoveDirection =
+            transform.InverseTransformDirection(
+                currentMoveDirection);
+
+        localMoveDirection.y = 0f;
+
+        if (localMoveDirection.sqrMagnitude < 0.001f)
+            return;
+
+        localMoveDirection.Normalize();
+
+        Vector3 targetPosition =
+            new Vector3(
+                localMoveDirection.x * radius,
+                visorIdlePosition.y,
+                localMoveDirection.z * radius);
+
         visor.localPosition =
             Vector3.Lerp(
                 visor.localPosition,
-                visorIdlePosition,
-                10f * Time.deltaTime);
-
-        return;
+                targetPosition,
+                12f * Time.deltaTime);
     }
 
-    Vector3 localMoveDirection =
-        transform.InverseTransformDirection(
-            currentMoveDirection);
-
-    localMoveDirection.y = 0f;
-
-    if (localMoveDirection.sqrMagnitude < 0.001f)
-        return;
-
-    localMoveDirection.Normalize();
-
-    Vector3 targetPosition =
-        new Vector3(
-            localMoveDirection.x * radius,
-            visorIdlePosition.y,
-            localMoveDirection.z * radius);
-
-    visor.localPosition =
-        Vector3.Lerp(
-            visor.localPosition,
-            targetPosition,
-            12f * Time.deltaTime);
-}
     private void HandleRotationToMouse()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);

@@ -40,9 +40,6 @@ public class AquaDrone : MonoBehaviour, IDamageable
     {
         currentHealth -= amount;
 
-        Debug.Log(
-            $"[AquaDrone] Daño recibido: {amount}. Energía restante: {currentHealth}");
-
         if (currentHealth <= 0f)
         {
             GameOver();
@@ -72,7 +69,6 @@ public class AquaDrone : MonoBehaviour, IDamageable
 
         float timer = 0f;
 
-        // Se aplasta rápidamente
         while (timer < reactionDuration)
         {
             timer += Time.deltaTime;
@@ -88,7 +84,6 @@ public class AquaDrone : MonoBehaviour, IDamageable
 
         timer = 0f;
 
-        // Recupera lentamente la forma
         while (timer < reactionDuration * 3f)
         {
             timer += Time.deltaTime;
