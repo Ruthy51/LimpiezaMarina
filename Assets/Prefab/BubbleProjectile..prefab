@@ -154,5 +154,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BubbleProjectile
   speed: 12
-  damageAmount: 15
-  lifeTime: 3
+  lifetime: 3
+  damageAmount: 10
