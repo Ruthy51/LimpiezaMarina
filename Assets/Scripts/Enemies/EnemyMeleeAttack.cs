@@ -37,12 +37,20 @@ public class EnemyMeleeAttack : EnemyAttack
         if (!CanAttack())
             return;
 
+        Debug.Log(
+            $"[MELEE START] Objetivo: {target.name} | " +
+            $"Distancia inicio: {Vector3.Distance(transform.position, target.transform.position):F2} | " +
+            $"Frame: {Time.frameCount}");
+
         RegisterAttack();
 
         currentTarget = target;
 
         if (animator != null)
         {
+            Debug.Log(
+                $"[MELEE START] Lanzando trigger TackleAttack | Frame: {Time.frameCount}");
+
             animator.SetTrigger("TackleAttack");
         }
     }
@@ -52,7 +60,25 @@ public class EnemyMeleeAttack : EnemyAttack
     /// </summary>
     public void OnMeleeImpactFrame()
     {
-        Debug.Log("[EnemyMeleeAttack] Frame de impacto recibido.");
+        Debug.Log(
+            $"[MELEE IMPACT] Frame de impacto recibido | Frame: {Time.frameCount}");
+
+        if (currentTarget != null)
+        {
+            float distance =
+                Vector3.Distance(
+                    transform.position,
+                    currentTarget.transform.position);
+
+            Debug.Log(
+                $"[MELEE IMPACT] Target: {currentTarget.name} | " +
+                $"Distancia actual: {distance:F2}");
+        }
+        else
+        {
+            Debug.LogWarning(
+                "[MELEE IMPACT] currentTarget es NULL");
+        }
 
         if (audioSource != null &&
             impactSound != null)
@@ -64,6 +90,9 @@ public class EnemyMeleeAttack : EnemyAttack
             currentTarget.TryGetComponent<IDamageable>(
                 out IDamageable damageable))
         {
+            Debug.Log(
+                $"[MELEE IMPACT] Aplicando daño: {damage}");
+
             damageable.TakeDamage(damage);
 
             currentTarget.SendMessage(
@@ -76,6 +105,9 @@ public class EnemyMeleeAttack : EnemyAttack
         }
         else
         {
+            Debug.LogWarning(
+                "[MELEE IMPACT] No se encontró un objetivo válido para dañar.");
+
          //   StartCoroutine(
          //       DisplayBanner(
          //           "¡ATAQUE MELEE EJECUTADO (SIN BLANCO)!"));
