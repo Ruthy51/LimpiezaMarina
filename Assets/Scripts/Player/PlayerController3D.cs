@@ -12,6 +12,7 @@
 
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController3D : MonoBehaviour
@@ -220,18 +221,18 @@ public class PlayerController3D : MonoBehaviour
 
     private void HandleAttacks()
     {
-        if (Input.GetMouseButtonDown(0))
+      if (Input.GetMouseButtonDown(0) &&
+            !EventSystem.current.IsPointerOverGameObject())
         {
             ExecuteRangedAttack();
-        }
-
+        }   
         if ((Input.GetMouseButtonDown(1) ||
-             Input.GetKeyDown(KeyCode.Space))
-             && !isScanning)
+            Input.GetKeyDown(KeyCode.Space))
+            && !isScanning
+            && !EventSystem.current.IsPointerOverGameObject())
         {
-            StartCoroutine(ActivateCollectorCone());
-        }
-    }
+    StartCoroutine(ActivateCollectorCone());
+}   }
 
     private void ExecuteRangedAttack()
     {
