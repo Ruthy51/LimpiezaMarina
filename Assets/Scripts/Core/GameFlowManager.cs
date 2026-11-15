@@ -6,10 +6,12 @@
  * Integrantes: Ariana Ruiz, Ruth Wulf
  * Función: Gestión del flujo general de la partida.
  * Explicación: Controla la visualización de paneles auxiliares,
- *              la navegación entre escenas y otras funciones
- *              globales asociadas al desarrollo de la partida.
+ *              la navegación entre escenas, la secuencia inicial
+ *              de presentación del lago y otras funciones globales
+ *              asociadas al desarrollo de la partida.
  *********************************************************************************************/
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,6 +20,16 @@ public class GameFlowManager : MonoBehaviour
     [Header("Panel")]
     [SerializeField] private GameObject panelControles;
 
+    [Header("Cámaras")]
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private Camera introCamera;
+
+    [Header("Jugador")]
+    [SerializeField] private PlayerController3D playerController;
+
+    [Header("Intro")]
+    [SerializeField] private float introDuration = 3f;
+
     private bool controlesAbiertos;
 
     private void Start()
@@ -25,6 +37,43 @@ public class GameFlowManager : MonoBehaviour
         if (panelControles != null)
         {
             panelControles.SetActive(false);
+        }
+
+        StartCoroutine(PlayIntro());
+    }
+
+    private IEnumerator PlayIntro()
+    {
+        if (introCamera != null)
+        {
+            introCamera.gameObject.SetActive(true);
+        }
+
+        if (mainCamera != null)
+        {
+            mainCamera.gameObject.SetActive(false);
+        }
+
+        if (playerController != null)
+        {
+            playerController.enabled = false;
+        }
+
+        yield return new WaitForSeconds(introDuration);
+
+        if (introCamera != null)
+        {
+            introCamera.gameObject.SetActive(false);
+        }
+
+        if (mainCamera != null)
+        {
+            mainCamera.gameObject.SetActive(true);
+        }
+
+        if (playerController != null)
+        {
+            playerController.enabled = true;
         }
     }
 
