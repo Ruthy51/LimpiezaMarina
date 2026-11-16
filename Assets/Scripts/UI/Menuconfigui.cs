@@ -18,8 +18,14 @@ public class MenuConfigUI : MonoBehaviour
 {
     [Header("Referencias")]
     [SerializeField] private CanvasGroup panelConfig;
+
     [Tooltip("Botón Menú del panel. Se oculta cuando ya estamos en la escena de inicio.")]
     [SerializeField] private GameObject botonMenu;
+
+    [Header("Controles opcionales")]
+    [SerializeField] private GameObject botonConfig;
+    [SerializeField] private GameObject iconoVolumen;
+    [SerializeField] private GameObject sliderVolumen;
 
     [Header("Ajustes")]
     [SerializeField] private string escenaMenu = "Inicio";
@@ -59,8 +65,19 @@ public class MenuConfigUI : MonoBehaviour
     // Conectar al On Click () de la ruedita.
     public void Alternar()
     {
-        if (abierto) Cerrar();
-        else Abrir();
+        if (abierto)
+            Cerrar();
+        else
+            Abrir();
+    }
+
+    // Se usa automáticamente en Victoria y Derrota.
+    public void AbrirAutomaticamente()
+    {
+        if (!abierto)
+        {
+            Abrir();
+        }
     }
 
     // Conectar al On Click () del botón Menú.
@@ -82,27 +99,34 @@ public class MenuConfigUI : MonoBehaviour
 
         panelConfig.interactable = true;
         panelConfig.blocksRaycasts = true;
+
         IniciarFade(1f);
     }
 
     private void Cerrar()
     {
         abierto = false;
+
         RestaurarTiempo();
 
         panelConfig.interactable = false;
         panelConfig.blocksRaycasts = false;
+
         IniciarFade(0f);
     }
 
     private void CerrarInmediato()
     {
-        if (!abierto) return;
+        if (!abierto)
+            return;
 
         abierto = false;
+
         RestaurarTiempo();
 
-        if (fadeActual != null) StopCoroutine(fadeActual);
+        if (fadeActual != null)
+            StopCoroutine(fadeActual);
+
         FijarEstadoPanel(false);
     }
 
@@ -116,11 +140,14 @@ public class MenuConfigUI : MonoBehaviour
 
     private void IniciarFade(float destino)
     {
-        if (fadeActual != null) StopCoroutine(fadeActual);
+        if (fadeActual != null)
+            StopCoroutine(fadeActual);
+
         fadeActual = StartCoroutine(Fade(destino));
     }
 
-    // Usa unscaledDeltaTime porque con el juego pausado (timeScale = 0) el fundido no avanzaría.
+    // Usa unscaledDeltaTime porque con el juego pausado
+    // (timeScale = 0) el fundido no avanzaría.
     private IEnumerator Fade(float destino)
     {
         float inicio = panelConfig.alpha;
@@ -129,7 +156,13 @@ public class MenuConfigUI : MonoBehaviour
         while (t < duracionFade)
         {
             t += Time.unscaledDeltaTime;
-            panelConfig.alpha = Mathf.Lerp(inicio, destino, t / duracionFade);
+
+            panelConfig.alpha =
+                Mathf.Lerp(
+                    inicio,
+                    destino,
+                    t / duracionFade);
+
             yield return null;
         }
 
@@ -146,15 +179,39 @@ public class MenuConfigUI : MonoBehaviour
 
     private void AlCargarEscena(Scene escena, LoadSceneMode modo)
     {
-        CerrarInmediato();
         ActualizarBotonMenu(escena);
+
+        bool esPantallaFinal =
+            escena.name == "Victoria" ||
+            escena.name == "Derrota";
+
+        if (botonConfig != null)
+            botonConfig.SetActive(!esPantallaFinal);
+
+        if (iconoVolumen != null)
+            iconoVolumen.SetActive(!esPantallaFinal);
+
+        if (sliderVolumen != null)
+            sliderVolumen.SetActive(!esPantallaFinal);
+
+        if (esPantallaFinal)
+        {
+            pausarJuego = false;
+            AbrirAutomaticamente();
+        }
+        else
+        {
+            pausarJuego = true;
+            CerrarInmediato();
+        }
     }
 
     private void ActualizarBotonMenu(Scene escena)
     {
         if (botonMenu != null)
         {
-            botonMenu.SetActive(escena.name != escenaMenu);
+            botonMenu.SetActive(
+                escena.name != escenaMenu);
         }
     }
 }

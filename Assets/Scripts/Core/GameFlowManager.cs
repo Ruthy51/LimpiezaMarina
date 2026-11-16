@@ -12,6 +12,7 @@
  *********************************************************************************************/
 
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -28,7 +29,14 @@ public class GameFlowManager : MonoBehaviour
     [SerializeField] private PlayerController3D playerController;
 
     [Header("Intro")]
-    [SerializeField] private float introDuration = 3f;
+    [SerializeField] private float introDuration = 6f;
+
+    [Header("Texto Intro")]
+    [SerializeField] private TMP_Text objetivoIntroText;
+
+    [Header("Audio Intro")]
+    [SerializeField] private AudioSource introAudioSource;
+    [SerializeField] private AudioClip introAmbientClip;
 
     private bool controlesAbiertos;
 
@@ -39,11 +47,41 @@ public class GameFlowManager : MonoBehaviour
             panelControles.SetActive(false);
         }
 
+        if (CleaningManager.Instance != null)
+        {
+            CleaningManager.Instance.GoalReached += IrAVictoria;
+        }
+
         StartCoroutine(PlayIntro());
+    }
+
+    private void OnDestroy()
+    {
+        if (CleaningManager.Instance != null)
+        {
+            CleaningManager.Instance.GoalReached -= IrAVictoria;
+        }
     }
 
     private IEnumerator PlayIntro()
     {
+        if (objetivoIntroText != null)
+        {
+            objetivoIntroText.text =
+                $"OBJETIVO DE LIMPIEZA\n\n{Mathf.RoundToInt(GameSettings.SelectedGoalPercentage)}%";
+
+            objetivoIntroText.gameObject.SetActive(true);
+        }
+
+        if (introAudioSource != null &&
+            introAmbientClip != null)
+        {
+            Debug.Log("[INTRO] Reproduciendo ambiente.");
+
+            introAudioSource.clip = introAmbientClip;
+            introAudioSource.Play();
+        }
+
         if (introCamera != null)
         {
             introCamera.gameObject.SetActive(true);
@@ -61,6 +99,12 @@ public class GameFlowManager : MonoBehaviour
 
         yield return new WaitForSeconds(introDuration);
 
+        if (introAudioSource != null &&
+            introAudioSource.isPlaying)
+        {
+            introAudioSource.Stop();
+        }
+
         if (introCamera != null)
         {
             introCamera.gameObject.SetActive(false);
@@ -75,11 +119,13 @@ public class GameFlowManager : MonoBehaviour
         {
             playerController.enabled = true;
         }
+
+        if (objetivoIntroText != null)
+        {
+            objetivoIntroText.gameObject.SetActive(false);
+        }
     }
 
-    /// <summary>
-    /// Abre o cierra el panel de controles.
-    /// </summary>
     public void ToggleControles()
     {
         if (panelControles == null)
@@ -94,19 +140,19 @@ public class GameFlowManager : MonoBehaviour
         panelControles.SetActive(controlesAbiertos);
     }
 
-    /// <summary>
-    /// Carga la escena de victoria.
-    /// </summary>
     public void IrAVictoria()
     {
+        Debug.Log(
+            "[GameFlowManager] Cargando escena Victoria.");
+
         SceneManager.LoadScene("Victoria");
     }
 
-    /// <summary>
-    /// Carga la escena de derrota.
-    /// </summary>
     public void IrADerrota()
     {
+        Debug.Log(
+            "[GameFlowManager] Cargando escena Derrota.");
+
         SceneManager.LoadScene("Derrota");
     }
 }
