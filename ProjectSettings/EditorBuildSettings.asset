@@ -11,5 +11,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Acuatico.unity
     guid: c8e1c9fc69171164eb0ce72bbd6351cb
+  - enabled: 1
+    path: Assets/Scenes/Victoria.unity
+    guid: f15d35feb2eaac1458e118921b7084fe
+  - enabled: 1
+    path: Assets/Scenes/Derrota.unity
+    guid: ce4c71c5f16c0ce41a844971ba066390
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

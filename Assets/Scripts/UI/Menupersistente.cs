@@ -14,7 +14,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-// Se ejecuta antes que el resto de los scripts para poder descartar duplicados a tiempo.
 [DefaultExecutionOrder(-100)]
 public class MenuPersistente : MonoBehaviour
 {
@@ -25,10 +24,8 @@ public class MenuPersistente : MonoBehaviour
 
     private void Awake()
     {
-        // Si ya existe un menú (por ejemplo, al volver a la escena Inicio), esta copia sobra.
         if (Instancia != null && Instancia != this)
         {
-            // Se desactiva antes de destruirla para que sus hijos no ejecuten Awake/OnEnable/Start.
             gameObject.SetActive(false);
             Destroy(gameObject);
             return;
@@ -36,12 +33,12 @@ public class MenuPersistente : MonoBehaviour
 
         Instancia = this;
 
-        // DontDestroyOnLoad solo funciona con objetos raíz: este GameObject no debe tener padre.
         DontDestroyOnLoad(gameObject);
 
         if (eventSystemPropio == null)
         {
-            eventSystemPropio = GetComponentInChildren<EventSystem>(true);
+            eventSystemPropio =
+                GetComponentInChildren<EventSystem>(true);
         }
 
         SceneManager.sceneLoaded += AlCargarEscena;
@@ -56,17 +53,25 @@ public class MenuPersistente : MonoBehaviour
         }
     }
 
-    private void AlCargarEscena(Scene escena, LoadSceneMode modo)
+    private void AlCargarEscena(
+        Scene escena,
+        LoadSceneMode modo)
     {
         EliminarEventSystemsAjenos();
+
+        Debug.Log(
+            $"[MenuPersistente] Escena cargada: {escena.name}");
     }
 
-    // Unity solo admite un EventSystem activo: se conserva el del menú y se quitan los de las escenas.
     private void EliminarEventSystemsAjenos()
     {
-        if (eventSystemPropio == null) return;
+        if (eventSystemPropio == null)
+            return;
 
-        EventSystem[] todos = FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
+        EventSystem[] todos =
+            FindObjectsByType<EventSystem>(
+                FindObjectsSortMode.None);
+
         foreach (EventSystem es in todos)
         {
             if (es != eventSystemPropio)
