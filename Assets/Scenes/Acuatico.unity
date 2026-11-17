@@ -18708,9 +18708,9 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 272a2de341761af49af6c1de520d569c, type: 3}
+  m_Resource: {fileID: 8300000, guid: fa70a816678420941806999df54a0b57, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.691
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -18810,7 +18810,7 @@ MonoBehaviour:
   mainCamera: {fileID: 1951799358}
   introCamera: {fileID: 2063452239}
   playerController: {fileID: 1758733254}
-  introDuration: 5
+  introDuration: 3
   objetivoIntroText: {fileID: 1210275357}
   introAudioSource: {fileID: 1724673455}
   introAmbientClip: {fileID: 8300000, guid: 272a2de341761af49af6c1de520d569c, type: 3}
