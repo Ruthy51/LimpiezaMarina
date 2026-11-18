@@ -9,15 +9,13 @@
  *              elegida por el jugador desde la pantalla de Inicio.
  ***********/
 
-public static class GameSettings
-{
-    /// <summary>
-    /// Porcentaje de limpieza objetivo elegido por el jugador.
-    /// </summary>
-    public static float SelectedGoalPercentage = 60f;
+using UnityEngine;
 
-    /// <summary>
-    /// Indica si la introducción narrativa ya fue vista.
-    /// </summary>
+public class GameSettings : MonoBehaviour
+{
+    // Bandera para la introducción (lo nuevo que agregamos)
     public static bool IntroYaVista = false;
+
+    // Variable que ya usaba tu juego para el porcentaje de objetivos
+    public static float SelectedGoalPercentage = 100f; // o el valor por defecto que usaras
 }

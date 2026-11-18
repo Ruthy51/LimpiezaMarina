@@ -6421,9 +6421,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MenuConfigUI
   panelConfig: {fileID: 301664128}
   botonMenu: {fileID: 646523869}
-  botonConfig: {fileID: 0}
-  iconoVolumen: {fileID: 0}
-  sliderVolumen: {fileID: 0}
   escenaMenu: Inicio
   duracionFade: 0.2
   pausarJuego: 1
@@ -11719,12 +11716,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ca6da19c759b4c44a823ce724c3027c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IntroManager
-  audioSource: {fileID: 1905439632}
-  textoSubtitulos: {fileID: 0}
-  panelEcologistaUI: {fileID: 0}
-  panelBotonesMenu: {fileID: 0}
-  duracionTotalIntro: 13
-  nombreEscenaJuego: Scene_Game
+  cartelHistoria: {fileID: 998101465}
+  audioIntroduccion: {fileID: 1905439632}
+  botonJugar: {fileID: 1549975240}
+  slotElegirTipoEcologista: {fileID: 335071531}
+  slotObjetivos: {fileID: 1568069233}
+  animatorLumi: {fileID: 2040682754}
+  transformLumi: {fileID: 2040682753}
 --- !u!1 &1925197619
 GameObject:
   m_ObjectHideFlags: 0
