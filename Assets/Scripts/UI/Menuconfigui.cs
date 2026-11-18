@@ -22,11 +22,6 @@ public class MenuConfigUI : MonoBehaviour
     [Tooltip("Botón Menú del panel. Se oculta cuando ya estamos en la escena de inicio.")]
     [SerializeField] private GameObject botonMenu;
 
-    [Header("Controles opcionales")]
-    [SerializeField] private GameObject botonConfig;
-    [SerializeField] private GameObject iconoVolumen;
-    [SerializeField] private GameObject sliderVolumen;
-
     [Header("Ajustes")]
     [SerializeField] private string escenaMenu = "Inicio";
     [SerializeField] private float duracionFade = 0.2f;
@@ -62,7 +57,7 @@ public class MenuConfigUI : MonoBehaviour
     }
 #endif
 
-    // Conectar al On Click () de la ruedita.
+    // Conectar al On Click() de la ruedita.
     public void Alternar()
     {
         if (abierto)
@@ -71,16 +66,7 @@ public class MenuConfigUI : MonoBehaviour
             Abrir();
     }
 
-    // Se usa automáticamente en Victoria y Derrota.
-    public void AbrirAutomaticamente()
-    {
-        if (!abierto)
-        {
-            Abrir();
-        }
-    }
-
-    // Conectar al On Click () del botón Menú.
+    // Conectar al On Click() del botón Menú.
     public void IrAlMenu()
     {
         CerrarInmediato();
@@ -179,31 +165,8 @@ public class MenuConfigUI : MonoBehaviour
 
     private void AlCargarEscena(Scene escena, LoadSceneMode modo)
     {
+        CerrarInmediato();
         ActualizarBotonMenu(escena);
-
-        bool esPantallaFinal =
-            escena.name == "Victoria" ||
-            escena.name == "Derrota";
-
-        if (botonConfig != null)
-            botonConfig.SetActive(!esPantallaFinal);
-
-        if (iconoVolumen != null)
-            iconoVolumen.SetActive(!esPantallaFinal);
-
-        if (sliderVolumen != null)
-            sliderVolumen.SetActive(!esPantallaFinal);
-
-        if (esPantallaFinal)
-        {
-            pausarJuego = false;
-            AbrirAutomaticamente();
-        }
-        else
-        {
-            pausarJuego = true;
-            CerrarInmediato();
-        }
     }
 
     private void ActualizarBotonMenu(Scene escena)

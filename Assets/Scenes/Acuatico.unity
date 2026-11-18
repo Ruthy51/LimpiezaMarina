@@ -19141,7 +19141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86814c8e5c507fa438c1ab130f75a2af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AquaDrone
-  maxHealth: 100
+  maxHealth: 80
   squashAmount: 0.7
   reactionDuration: 0.1
 --- !u!114 &1758733257

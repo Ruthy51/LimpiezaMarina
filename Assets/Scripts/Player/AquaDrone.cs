@@ -25,6 +25,8 @@ public class AquaDrone : MonoBehaviour, IDamageable
     private float currentHealth;
 
     private bool isReacting = false;
+    private bool isDead = false;
+
     private Vector3 originalScale;
 
     public float CurrentHealth => currentHealth;
@@ -38,10 +40,14 @@ public class AquaDrone : MonoBehaviour, IDamageable
 
     public void TakeDamage(float amount)
     {
+        if (isDead)
+            return;
+
         currentHealth -= amount;
 
         if (currentHealth <= 0f)
         {
+            currentHealth = 0f;
             GameOver();
         }
     }
@@ -104,10 +110,22 @@ public class AquaDrone : MonoBehaviour, IDamageable
 
     private void GameOver()
     {
+        isDead = true;
+
         Debug.Log(
             "[AquaDrone] El dron ha quedado inoperativo.");
 
-        // TODO:
-        // GameManager.Instance.GameOver();
+        GameFlowManager gameFlow =
+            FindFirstObjectByType<GameFlowManager>();
+
+        if (gameFlow != null)
+        {
+            gameFlow.IrADerrota();
+        }
+        else
+        {
+            Debug.LogWarning(
+                "[AquaDrone] No se encontró GameFlowManager.");
+        }
     }
 }
