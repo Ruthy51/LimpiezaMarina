@@ -36,6 +36,19 @@ public class IntroManager : MonoBehaviour
     [Tooltip("El Transform de Lumi para moverla a la posición del trigger al reingresar")]
     [SerializeField] private Transform transformLumi;
 
+    private void Awake()
+    {
+        // AWAKE se ejecuta antes que Start. 
+        // Aquí apagamos todo instantáneamente en el primer milisegundo para que no parpadee nada.
+        if (!GameSettings.IntroYaVista)
+        {
+            if (cartelHistoria != null) cartelHistoria.SetActive(true);
+            if (botonJugar != null) botonJugar.SetActive(false);
+            if (slotElegirTipoEcologista != null) slotElegirTipoEcologista.SetActive(false);
+            if (slotObjetivos != null) slotObjetivos.SetActive(false);
+        }
+    }
+
     private void Start()
     {
         // Verificamos si la intro ya se vio en esta ejecución del juego
@@ -58,17 +71,11 @@ public class IntroManager : MonoBehaviour
     /// </summary>
     private IEnumerator SecuenciaMomento1()
     {
-        // 1. Mostrar cartel y OCULTAR el botón jugar y los dos slots
-        if (cartelHistoria != null) cartelHistoria.SetActive(true);
-        if (botonJugar != null) botonJugar.SetActive(false);
-        if (slotElegirTipoEcologista != null) slotElegirTipoEcologista.SetActive(false);
-        if (slotObjetivos != null) slotObjetivos.SetActive(false);
-
         // Activar animación de caminar en Lumi
         if (animatorLumi != null)
             animatorLumi.SetBool("Caminando", true);
 
-        // 2. Reproducir el audio de la intro
+        // Reproducir el audio de la intro
         if (audioIntroduccion != null)
         {
             audioIntroduccion.Play();
@@ -81,14 +88,14 @@ public class IntroManager : MonoBehaviour
             yield return new WaitForSeconds(3f);
         }
 
-        // 3. Cuando termina el audio, Lumi se detiene
+        // Cuando termina el audio, Lumi se detiene
         if (animatorLumi != null)
             animatorLumi.SetBool("Caminando", false);
 
-        // 4. Marcamos que la intro ya se vio
+        // Marcamos que la intro ya se vio
         GameSettings.IntroYaVista = true;
 
-        // 5. Activamos el Momento 2 (oculta cartel, muestra Jugar, Tipo de Ecologista y Objetivos a la vez)
+        // Activamos el Momento 2 (oculta cartel, muestra Jugar, Tipo de Ecologista y Objetivos juntos)
         ActivarMomento2Visualmente();
     }
 
