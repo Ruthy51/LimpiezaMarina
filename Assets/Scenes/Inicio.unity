@@ -5691,7 +5691,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1eed8c0c756ddc74a9c71c5d204fd2de, type: 2}
+  - {fileID: 2100000, guid: 211736ca1feeeee4f9fcc8ddbb52e4b5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6934,7 +6934,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IntroStopTrigger
   lumiAnimator: {fileID: 2040682754}
-  botonJugar: {fileID: 1549975240}
 --- !u!1001 &1146760872
 PrefabInstance:
   m_ObjectHideFlags: 0
